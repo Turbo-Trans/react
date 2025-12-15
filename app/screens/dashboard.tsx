@@ -1,5 +1,7 @@
 import React, { useEffect, useState} from "react";
 import { dashboardTexts } from "../props/dashBoardProps";
+import { Navbar } from "~/components/navbar";
+import { navbarTexts } from "~/props/navbarProps";
 
 type User = {
     username: string;
@@ -20,9 +22,11 @@ export function Dashboard (){
             setUser(null);
         }
     }, []);
-
     return(
+        <>
+        <Navbar {...navbarTexts} />
         <main className="min-h-screen bg-gray-100 flex items-center justify-center px-6">
+
             <div className="bg-white border border-gray-200 rounded-2x1 p-8 shadow-sm text-center">
                 <h1 className="text-2x1 font-bold text-gray-900">
                     {dashboardTexts.title}
@@ -35,5 +39,6 @@ export function Dashboard (){
                 </p>
             </div>
         </main>
+        </>
     );
 }

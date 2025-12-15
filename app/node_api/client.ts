@@ -31,7 +31,8 @@ export async function request<T = any>(
   // Hata kontrolü
   if (!response.ok) {
     throw new Error(
-      data?.message ||
+      data?.message || 
+      data?.error ||
       `API Hatası (status: ${response.status})`
     );
   }
