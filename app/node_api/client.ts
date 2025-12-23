@@ -1,5 +1,9 @@
 // Backend local test ortamında çalışırken kullanılan base URL
-const BASE_URL = "http://localhost:3000";
+// const BASE_URL = "http://localhost:3000";
+
+// Live ortam
+
+const BASE_URL = "http://82.25.112.25:3000";
 
 export async function request<T = any>(
   endpoint: string,
