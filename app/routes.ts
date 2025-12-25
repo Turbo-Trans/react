@@ -5,5 +5,7 @@ export default [
   route("login", "routes/login.tsx"),
   route("dashboard", "routes/dashboard.tsx"),
   route("userManagement", "routes/userManagement.tsx"),
-  route("warehouse", "routes/warehouse.tsx")
+  route("warehouse", "routes/warehouse.tsx"),
+  route("trucks", "routes/trucks.tsx"),
+  route("*", "routes/404.tsx")
 ] satisfies RouteConfig;

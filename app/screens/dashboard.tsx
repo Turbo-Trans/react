@@ -27,8 +27,8 @@ export function Dashboard (){
         <Navbar {...navbarTexts} />
         <main className="min-h-screen bg-gray-100 flex items-center justify-center px-6">
 
-            <div className="bg-white border border-gray-200 rounded-2x1 p-8 shadow-sm text-center">
-                <h1 className="text-2x1 font-bold text-gray-900">
+            <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm text-center">
+                <h1 className="text-2xl font-bold text-gray-900">
                     {dashboardTexts.title}
                 </h1>
                 <p className="mt-4 text-gray-700">

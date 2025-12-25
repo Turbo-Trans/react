@@ -26,7 +26,7 @@ export interface NavbarProps {
 export const navbarTexts: NavbarProps = {
   brand: {
     name: "TransFlow",
-    subtitle: "İş Ortağı Paneli",
+    subtitle: "Operasyon Paneli",
   },
 
   menu: [
