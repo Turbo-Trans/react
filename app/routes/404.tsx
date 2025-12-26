@@ -42,7 +42,7 @@ export default function NotFoundRoute() {
           </h2>
           <p className="text-gray-500 mb-10 text-lg">
             Görünüşe göre rotadan saptınız. <br />
-            Aradığınız sayfa sistemimizde mevcut değil.
+            Aradığınız sayfa sistemimizde mevcut değil!.
           </p>
 
           <div className="flex flex-col gap-3">
