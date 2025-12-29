@@ -13,7 +13,7 @@ export interface StepProps {
 // textler
 export const landingTexts = {
   hero: {
-    titleLine1: "TransFlow",
+    titleLine1: "Last",
     titleLine2: "Yapay Zeka Destekli Lojistik Optimizasyonu",
     description:
       "Depolar, araç filoları ve ürün akışları için uçtan uca lojistik yönetimi. Daha az maliyet, daha hızlı teslimat, daha akıllı kararlar.",
@@ -60,7 +60,7 @@ export const landingTexts = {
   },
 
   footer: {
-    brand: "TransFlow",
+    brand: "Last",
     addressLine1: "Halkalı Merkez Mah. Halkalı Cad No:281/23",
     addressLine2: "Ofis No:34, 34303 Küçükçekmece / İstanbul",
     copyright: "Tüm hakları saklıdır.",

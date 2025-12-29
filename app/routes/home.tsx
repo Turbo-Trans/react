@@ -4,8 +4,8 @@ import { Landing } from "../screens/landing";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "TransFlow" },
-    { name: "description", content: "Welcome to TransFlow — AI-Powered Logistics Optimization!" },
+    { title: "Last" },
+    { name: "description", content: "Welcome to Last — AI-Powered Logistics Optimization!" },
   ];
 }
 

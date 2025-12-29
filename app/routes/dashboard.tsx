@@ -3,8 +3,8 @@ import { Dashboard } from "~/screens/dashboard";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Dashboard - TransFlow" },
-    { name: "description", content: "TransFlow lojistik yönetim paneline hoşgeldiniz" },
+    { title: "Dashboard - Last" },
+    { name: "description", content: "Last lojistik yönetim paneline hoşgeldiniz" },
   ];
 }
 

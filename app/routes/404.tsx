@@ -3,8 +3,8 @@ import { Link } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "404 - Sayfa Bulunamadı - TransFlow" },
-    { name: "description", content: "Aradığınız sayfa TransFlow sisteminde bulunamadı." },
+    { title: "404 - Sayfa Bulunamadı - Last" },
+    { name: "description", content: "Aradığınız sayfa Last sisteminde bulunamadı." },
   ];
 }
 
@@ -66,7 +66,7 @@ export default function NotFoundRoute() {
         </div>
         {/* Footer */}
         <p className="text-center mt-10 text-gray-400 text-sm tracking-widest uppercase">
-          © 2025 TransFlow Lojistik Sistemleri
+          © 2025 Last Lojistik Sistemleri
         </p>
       </div>
     </main>
