@@ -1,6 +1,6 @@
 //textler
 export const dashboardTexts = {
   title: "Dashboard",
-  welcome: "Hoş Geldin",
+  welcome: "Merhaba, Hoş Geldin",
   fallbackUsername: "Kullanıcı",
 };
