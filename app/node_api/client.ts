@@ -2,7 +2,7 @@
 //const BASE_URL = "http://localhost:3000";
 
 // Live ortam
-const BASE_URL = "http://lasttik.com:3000";
+const BASE_URL = "http://lasttik.com";
 
 export async function request<T = any>(
   endpoint: string,
