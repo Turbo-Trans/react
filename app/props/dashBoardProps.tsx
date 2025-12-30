@@ -3,7 +3,7 @@ export const dashboardTexts = {
   title: "Dashboard",
   
   live: "Canlı",
-  loading: "Yükleniyor",
+  loading: "Yükleniyor...",
   
   stats: {
     trucks: "Toplam Tır",
