@@ -65,24 +65,26 @@ export function Landing() {
 
       {/* FOOTER */}
       <footer className="mt-auto bg-gray-50 py-10 px-6 text-sm text-gray-600">
-        <div className="max-w-6xl mx-auto relative min-h-[80px]">
-          <div className="text-left">
-            <p className="font-semibold text-gray-900">
-              {landingTexts.footer.brand}
-            </p>
-            <p className="mt-2 leading-relaxed">
-              {landingTexts.footer.addressLine1} <br />
-              {landingTexts.footer.addressLine2}
-            </p>
-          </div>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+            <div className="text-left">
+              <p className="font-semibold text-gray-900">
+                {landingTexts.footer.brand}
+              </p>
+              <p className="mt-2 leading-relaxed">
+                {landingTexts.footer.addressLine1} <br />
+                {landingTexts.footer.addressLine2}
+              </p>
+            </div>
 
-          <div className="absolute right-0 bottom-0 text-right">
-            <p className="text-gray-500">
-              © {new Date().getFullYear()} {landingTexts.footer.brand}
-            </p>
-            <p className="text-gray-400">
-              {landingTexts.footer.copyright}
-            </p>
+            <div className="text-left md:text-right">
+              <p className="text-gray-500">
+                © {new Date().getFullYear()} {landingTexts.footer.brand}
+              </p>
+              <p className="text-gray-400">
+                {landingTexts.footer.copyright}
+              </p>
+            </div>
           </div>
         </div>
       </footer>

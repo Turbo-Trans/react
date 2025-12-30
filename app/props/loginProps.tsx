@@ -1,6 +1,6 @@
 //textler
 export const loginTexts = {
-  brand: "TransFlow",
+  brand: "Last",
   subtitle: "Lojistik yönetim paneline giriş yapın",
 
   identifierLabel: "Kullanıcı Adı veya E-posta",

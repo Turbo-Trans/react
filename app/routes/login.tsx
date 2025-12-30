@@ -3,8 +3,8 @@ import { Login } from "../screens/login";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Giriş Yap - TransFlow" },
-    { name: "description", content: "TransFlow lojistik yönetim paneline giriş yapın" },
+    { title: "Giriş Yap - Last" },
+    { name: "description", content: "Last lojistik yönetim paneline giriş yapın" },
   ];
 }
 

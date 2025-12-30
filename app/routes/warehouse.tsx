@@ -3,8 +3,8 @@ import { WarehouseManagement } from "~/screens/warehouse";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Depo Yönetimi - TransFlow" },
-    { name: "description", content: "TransFlow depo yönetimi ekranı" },
+    { title: "Depo Yönetimi - Last" },
+    { name: "description", content: "Last depo yönetimi ekranı" },
   ];
 }
 

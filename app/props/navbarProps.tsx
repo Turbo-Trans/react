@@ -25,7 +25,7 @@ export interface NavbarProps {
 // textler
 export const navbarTexts: NavbarProps = {
   brand: {
-    name: "TransFlow",
+    name: "Last",
     subtitle: "Operasyon Paneli",
   },
 
