@@ -12,7 +12,15 @@ export function Landing() {
       {/* HERO */}
       <section className="flex flex-col items-center justify-center text-center px-6 pt-32 pb-24">
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight max-w-4xl">
-          {landingTexts.hero.titleLine1} <br className="hidden md:block" />
+          <span className="flex items-center justify-center gap-1">
+            {landingTexts.hero.titleLine1}
+            <img 
+              src="/favicon.ico" 
+              alt="Logo" 
+              className="h-[1em] w-auto"
+            />
+          </span>
+          <br className="hidden md:block" />
           {landingTexts.hero.titleLine2}
         </h1>
 

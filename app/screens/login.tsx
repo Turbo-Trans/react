@@ -43,7 +43,14 @@ export function Login() {
 
         {/* TITLE */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">{loginTexts.brand}</h1>
+          <h1 className="text-3xl font-bold text-gray-900 flex items-center justify-center gap-1">
+            {loginTexts.brand}
+            <img 
+              src="/favicon.ico" 
+              alt="Logo" 
+              className="h-[1em] w-auto"
+            />
+          </h1>
           <p className="mt-2 text-gray-600">
             {loginTexts.subtitle}
           </p>
