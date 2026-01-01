@@ -43,7 +43,7 @@ export const userManagementTexts = {
     title: "Kullanıcı Ekle",
     username: "Kullanıcı Adı",
     password: "Şifre",
-    passwordHint: "8-64 karakter, en az 1 rakam ve 1 özel karakter (. _ dahil) içermelidir.",
+    passwordHint: "8-64 karakter, en az 1 rakam ve 1 özel karakter içermelidir.",
     email: "Email",
     tel: "Telefon",
     cityID: "Şehir ID",
@@ -55,8 +55,23 @@ export const userManagementTexts = {
     save: "Kaydet",
     requiredFields: "Tüm alanlar zorunludur.",
     usernameTooLong: "Kullanıcı adı 50 karakterden büyük olamaz.",
-    passwordInvalid: "Şifre 8-64 karakter olmalı, en az 1 rakam ve 1 özel karakter (. _ dahil) içermelidir.",
+    passwordInvalid: "Şifre 8-64 karakter olmalı, en az 1 rakam ve 1 özel karakter içermelidir.",
     error: "Kullanıcı eklenirken bir hata oluştu.",
+
+    usernamePlaceholder: "kullanıcı",
+    passwordPlaceholder: "••••••••",
+    emailPlaceholder: "email@example.com",
+    telPlaceholder: "05...",
+    jobPlaceholder: "Müdür",
+
+    userID: "Kullanıcı ID",
+    city: "Şehir",
+    warehouse: "Depo",
+  },
+  
+  viewUser: {
+    title: "Kullanıcı Detayları",
+    close: "Kapat",
   },
 
   permissions: {
