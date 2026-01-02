@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import type { FeatureProps, StepProps } from "../props/landingProps";
 import { landingTexts } from "../props/landingProps";
 
