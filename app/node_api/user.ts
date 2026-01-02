@@ -1,8 +1,16 @@
 import { request } from "./client";
 
 // tüm kullanıcıları getir
-export async function getUsers() {
-  return request("/getUsers");
+export async function getUsers(page: number = 1, limit: number = 10) {
+  const response = await request<{
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    filters: any;
+    data: any[];
+  }>(`/getUsers?page=${page}&limit=${limit}`);
+  return response;
 }
 
 // kullanıcı ekle

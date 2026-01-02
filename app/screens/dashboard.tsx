@@ -42,17 +42,17 @@ export function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [trucks, truckInfos, warehouses, users] = await Promise.all([
+        const [trucks, truckInfos, warehouses, usersResponse] = await Promise.all([
           getTrucks().catch(() => []),
           listTruckInfo().catch(() => []),
           getWH().catch(() => ({ data: [], total: 0 })),
-          getUsers().catch(() => []),
+          getUsers(1, 100).catch(() => ({ data: [], total: 0 })),
         ]);
 
         const trucksArray = Array.isArray(trucks) ? trucks : [];
         const truckInfosArray = Array.isArray(truckInfos) ? truckInfos : [];
         const warehousesArray = Array.isArray(warehouses?.data) ? warehouses.data : [];
-        const usersArray = Array.isArray(users) ? users : [];
+        const usersArray = Array.isArray(usersResponse?.data) ? usersResponse.data : [];
 
         setStats({
           trucks: trucksArray.length,

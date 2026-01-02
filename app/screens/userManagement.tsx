@@ -17,6 +17,12 @@ export function UserManagement() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "view">("add");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [limit] = useState(10);
 
   // Yeni kullanıcı Formu
   const [form, setForm] = useState({
@@ -32,15 +38,20 @@ export function UserManagement() {
   });
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchUsers(currentPage);
+  }, [currentPage]);
 
-  async function fetchUsers() {
+  async function fetchUsers(page: number = 1) {
+    setLoading(true);
     try {
-      const data = await getUsers();
-      setUsers(data);
+      const response = await getUsers(page, limit);
+      setUsers(response.data || []);
+      setTotalPages(response.totalPages || 1);
+      setTotal(response.total || 0);
     } catch {
       setUsers([]);
+      setTotalPages(1);
+      setTotal(0);
     } finally {
       setLoading(false);
     }
@@ -48,9 +59,10 @@ export function UserManagement() {
 
   // UI
   return (
-    <div className="min-h-screen bg-[#f1f5f9]">
+    <>
       <Navbar {...navbarTexts} />
-      <main className="p-6 md:p-10 max-w-7xl mx-auto">
+      <main className="p-6 md:p-10 bg-[#f1f5f9] min-h-screen">
+        <div className="max-w-7xl mx-auto">
         {/* title ve buton */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
           <div>
@@ -137,6 +149,71 @@ export function UserManagement() {
             </table>
             </div>
           )}
+          
+          {/* Pagination */}
+          {!loading && users.length > 0 && (
+            <div className="px-6 py-4 border-t border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-sm text-slate-600 font-medium">
+                Toplam <span className="font-bold text-slate-900">{total}</span> kullanıcıdan{" "}
+                <span className="font-bold text-slate-900">
+                  {(currentPage - 1) * limit + 1}
+                </span>
+                {" - "}
+                <span className="font-bold text-slate-900">
+                  {Math.min(currentPage * limit, total)}
+                </span>
+                {" arası gösteriliyor"}
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 rounded-xl font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 active:scale-95"
+                >
+                  Önceki
+                </button>
+                
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum: number;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+                    
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`px-4 py-2 rounded-xl font-bold text-sm min-w-[40px] transition-all ${
+                          currentPage === pageNum
+                            ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
+                            : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300"
+                        } active:scale-95`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  })}
+                </div>
+                
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 rounded-xl font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 active:scale-95"
+                >
+                  Sonraki
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
         </div>
       </main>
       {/* Kullanıcı modalı*/}
@@ -306,14 +383,14 @@ export function UserManagement() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
   // fonksiyonlar
   async function handleDelete(id: number) {
     if(!confirm(userManagementTexts.deleteConfirm)) return;
     try {
       await deleteUser(id);
-      fetchUsers();
+      fetchUsers(currentPage);
     } catch (error) {
       alert(error instanceof Error? error.message : userManagementTexts.deleteError);
     }
@@ -348,7 +425,7 @@ export function UserManagement() {
       setShowAddModal(false);
       resetForm();
       setModalMode("add");
-      fetchUsers();
+      fetchUsers(currentPage);
     } catch (error) {
       alert(error instanceof Error ? error.message : userManagementTexts.addUser.error);
     }
