@@ -37,3 +37,13 @@ export async function deleteUser(userID: number) {
     method: "DELETE",
   });
 }
+
+// ülkeleri getir
+export async function getCountries() {
+  return request<Array<{ countryID: number; countryName: string }> | { message: string }>("/getCountries");
+}
+
+// şehirleri getir
+export async function getCities(countryID: number) {
+  return request<Array<{ cityID: number; cityName: string; countryID: number }> | { message: string }>(`/getCities?id=${countryID}`);
+}

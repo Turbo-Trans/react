@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "~/components/navbar";
 import { navbarTexts } from "~/props/navbarProps";
-import { getUsers, deleteUser, addUser } from "~/node_api/user";
+import { getUsers, deleteUser, addUser, getCountries, getCities } from "~/node_api/user";
+import { getWH } from "~/node_api/warehouse";
 import type { User } from "~/props/userManagementProps";
 import { userManagementTexts } from "~/props/userManagementProps";
+import type { Warehouse } from "~/props/warehouseProps";
 
 
 const addUserButton = "inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all active:scale-95";
@@ -17,7 +19,7 @@ export function UserManagement() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "view">("add");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -31,15 +33,87 @@ export function UserManagement() {
     permission: 2, // 2: User
     email: "",
     tel: "",
+    countryID: "",
     cityID: "",
     address: "",
     job: "",
     warehouseID: "",
   });
 
+  const [countries, setCountries] = useState<Array<{ countryID: number; countryName: string }>>([]);
+  const [cities, setCities] = useState<Array<{ cityID: number; cityName: string; countryID: number }>>([]);
+  const [loadingCities, setLoadingCities] = useState(false);
+
+  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+  const [loadingWarehouses, setLoadingWarehouses] = useState(false);
+
   useEffect(() => {
     fetchUsers(currentPage);
+    fetchCountries();
+    fetchWarehouses();
   }, [currentPage]);
+
+  async function fetchCountries() {
+    try {
+      const result = await getCountries();
+      if (Array.isArray(result)) {
+        setCountries(result);
+      } else {
+        setCountries([]);
+      }
+    } catch (error) {
+      console.error("Ülkeler çekilirken bir hata meydana geldi:", error);
+      setCountries([]);
+    }
+  }
+
+  async function fetchCitiesForCountry(countryID: number) {
+    if (!countryID) {
+      setCities([]);
+      return;
+    }
+    setLoadingCities(true);
+    try {
+      const result = await getCities(countryID);
+      if (Array.isArray(result)) {
+        setCities(result);
+      } else {
+        setCities([]);
+      }
+    } catch (error) {
+      console.error("Şehirler çekilirken bir hata meydana geldi:", error);
+      setCities([]);
+    } finally {
+      setLoadingCities(false);
+    }
+  }
+
+  async function fetchWarehouses() {
+    setLoadingWarehouses(true);
+    try {
+      const result = await getWH({});
+      if (result.data && Array.isArray(result.data)) {
+        setWarehouses(result.data);
+      } else {
+        setWarehouses([]);
+      }
+    } catch (error) {
+      console.error("Depolar çekilirken bir hata meydana geldi:", error);
+      setWarehouses([]);
+    } finally {
+      setLoadingWarehouses(false);
+    }
+  }
+
+  // Ülke değişince şehirleri çek
+  useEffect(() => {
+    if (form.countryID) {
+      fetchCitiesForCountry(Number(form.countryID));
+    } else {
+      setCities([]);
+      setForm(prev => ({ ...prev, cityID: "" }));
+    }
+  }, [form.countryID]);
 
   async function fetchUsers(page: number = 1) {
     setLoading(true);
@@ -106,16 +180,43 @@ export function UserManagement() {
                   <tr
                     key={u.userID}
                       className="group hover:bg-blue-50/40 transition-colors cursor-pointer"
-                      onClick={(e) => {
+                      onClick={async (e) => {
                         if ((e.target as HTMLElement).closest('button')) return;
                         setSelectedUser(u);
                         setModalMode("view");
+                        
+                        let countryID = "";
+                        if (u.cityID) {
+                          try {
+                            const allCountries = await getCountries();
+                            if (Array.isArray(allCountries)) {
+                              for (const country of allCountries) {
+                                try {
+                                  const cityList = await getCities(country.countryID);
+                                  if (Array.isArray(cityList)) {
+                                    const foundCity = cityList.find(c => c.cityID === u.cityID);
+                                    if (foundCity) {
+                                      countryID = country.countryID.toString();
+                                      setCities(cityList);
+                                      break;
+                                    }
+                                  }
+                                } catch (err) {
+                                }
+                              }
+                            }
+                          } catch (err) {
+                            console.error("Error finding country for city:", err);
+                          }
+                        }
+                        
                         setForm({
                           username: u.username || "",
                           password: "",
                           permission: 2,
                           email: u.email || "",
                           tel: u.tel || "",
+                          countryID: countryID,
                           cityID: u.cityID?.toString() || "",
                           address: u.address || "",
                           job: u.job || "",
@@ -218,7 +319,7 @@ export function UserManagement() {
       </main>
       {/* Kullanıcı modalı*/}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <div 
             className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" 
             onClick={() => {
@@ -314,24 +415,54 @@ export function UserManagement() {
                   />
                 </div>
                 <div>
-                  <label className={labelClass}>{userManagementTexts.addUser.city}</label>
-              <input
-                type="number"
+                  <label className={labelClass}>Ülke</label>
+                  <select
                     className={`${inputClass} ${modalMode === "view" ? "bg-slate-100 cursor-not-allowed" : ""}`}
-                value={form.cityID}
-                    onChange={e => setForm({...form, cityID: e.target.value})}
-                    readOnly={modalMode === "view"}
-                  />
+                    value={form.countryID}
+                    onChange={e => {
+                      setForm({...form, countryID: e.target.value, cityID: ""});
+                    }}
+                    disabled={modalMode === "view"}
+                  >
+                    <option value="">Ülke Seçin</option>
+                    {countries.map(country => (
+                      <option key={country.countryID} value={country.countryID}>
+                        {country.countryName}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
+                  <label className={labelClass}>{userManagementTexts.addUser.city}</label>
+                  <select
+                    className={`${inputClass} ${modalMode === "view" ? "bg-slate-100 cursor-not-allowed" : ""} ${loadingCities ? "opacity-50" : ""}`}
+                    value={form.cityID}
+                    onChange={e => setForm({...form, cityID: e.target.value})}
+                    disabled={modalMode === "view" || !form.countryID || loadingCities}
+                  >
+                    <option value="">Şehir Seçin</option>
+                    {cities.map(city => (
+                      <option key={city.cityID} value={city.cityID}>
+                        {city.cityName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="md:col-span-2">
                   <label className={labelClass}>{userManagementTexts.addUser.warehouse}</label>
-              <input
-                type="number"
-                    className={`${inputClass} ${modalMode === "view" ? "bg-slate-100 cursor-not-allowed" : ""}`}
-                value={form.warehouseID}
+                  <select
+                    className={`${inputClass} ${modalMode === "view" ? "bg-slate-100 cursor-not-allowed" : ""} ${loadingWarehouses ? "opacity-50" : ""}`}
+                    value={form.warehouseID}
                     onChange={e => setForm({...form, warehouseID: e.target.value})}
-                    readOnly={modalMode === "view"}
-                  />
+                    disabled={modalMode === "view" || loadingWarehouses}
+                  >
+                    <option value="">Depo Seçin</option>
+                    {warehouses.map(warehouse => (
+                      <option key={warehouse.warehouseID} value={warehouse.warehouseID}>
+                        {warehouse.warehouseName}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 {modalMode === "add" && (
                   <div className="md:col-span-2">
@@ -403,12 +534,14 @@ export function UserManagement() {
       permission: 2, // 2: User
       email: "",
       tel: "",
+      countryID: "",
       cityID: "",
       address: "",
       job: "",
       warehouseID: "",
     });
     setSelectedUser(null);
+    setCities([]);
   }
 
   async function handleAddUser() {
