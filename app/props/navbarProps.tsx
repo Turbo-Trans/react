@@ -43,7 +43,7 @@ export const navbarTexts: NavbarProps = {
         path: "/profile",
       },
       {
-        label: "Çalışanlar",
+        label: "404 Test",
         action: "navigate",
         path: "/employees",
       },

@@ -12,3 +12,11 @@ export function login(username: string, password: string): Promise<LoginResponse
     body: JSON.stringify({ username, password }),
   });
 }
+
+export function logout(): Promise<{message: string}>{
+  return request("/logout", {
+    method: "POST",
+  });
+}
+
+

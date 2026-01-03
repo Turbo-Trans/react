@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import type { NavbarProps, ProfileMenuItem } from "../props/navbarProps";
+import { logout } from "~/node_api/auth";
 
 export function Navbar({ brand, menu, profile }: NavbarProps) {
   const navigate = useNavigate();
@@ -17,11 +18,17 @@ export function Navbar({ brand, menu, profile }: NavbarProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleProfileAction = (item: ProfileMenuItem) => {
+  const handleProfileAction = async (item: ProfileMenuItem) => {
     if (item.action === "logout") {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      navigate("/login");
+      try {
+        await logout();
+      } catch (error) {
+        console.error("Logout error:", error);
+      } finally {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/login");
+      }
       return;
     }
     if (item.action === "navigate" && item.path) {
